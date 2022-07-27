@@ -1,8 +1,5 @@
 const request = require('request-promise');
 const { WebClient, LogLevel } = require("@slack/web-api");
-const webhook = 'https://hooks.slack.com/services/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';
-const socketToken = 'xapp-1-A03P4QN23PF-3840217538502-5e193f669a5ab2386b57c42cec58194b70c35f6176f43220865fb61b0a5ac876'
-oAuthBotToken = 'xoxb-3776065274272-3786891233877-zAHtgDeXoye0tqAnai5FzegK';
 
 const client = new WebClient(oAuthBotToken, {
     //LogLevel can make debugging simpler
@@ -71,7 +68,7 @@ app.event('reaction_added', async ({ event, client, logger }) => {
 });
 
 
-/*(async function () {
+(async function () {
     try {
         const slackBody = {
             text: ':robert-point:',
@@ -79,7 +76,7 @@ app.event('reaction_added', async ({ event, client, logger }) => {
         };
         
         const res = await request({
-            url: webhook,
+            url: testChannelWebhook,
             method: 'POST',
             body: slackBody,
             json: true
@@ -90,4 +87,4 @@ app.event('reaction_added', async ({ event, client, logger }) => {
     } catch (e) {
         console.log('our error', e)
     }
-})();*/
+})();
