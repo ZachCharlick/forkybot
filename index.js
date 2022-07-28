@@ -1,6 +1,6 @@
+const Insult = require('./Models/Insult.cjs');
 const request = require('request-promise');
 const { WebClient, LogLevel } = require("@slack/web-api");
-
 
 require('dotenv').config()
 console.log(process.env) // remove this after you've confirmed it working
@@ -57,12 +57,12 @@ app.event('reaction_added', async ({ event, client, logger }) => {
 
     if(event.reaction === 'robert-point'){
         try {
-            var insultHandler = new Insult(event.user);
-            var insult = insultHandler.GetInsult();
+            var insultFactory = new Insult(event.user)
+            var message = insultFactory.insultMessage;
             // Call chat.postMessage with the built-in client
             const result = await client.chat.postMessage({
               channel: event.item.channel,
-              text: insult
+              text: message
             });
       
             logger.info(result);
@@ -73,25 +73,3 @@ app.event('reaction_added', async ({ event, client, logger }) => {
     }
     
 });
-
-/*
-(async function () {
-    try {
-        const slackBody = {
-            text: ':robert-point:',
-            channel: '#test'
-        };
-        
-        const res = await request({
-            url: process.env.WEBHOOK_TEST_CHANNEL,
-            method: 'POST',
-            body: slackBody,
-            json: true
-        });
-
-        console.log(res);
-
-    } catch (e) {
-        console.log('our error', e)
-    }
-})();*/
