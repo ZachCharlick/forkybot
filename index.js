@@ -1,7 +1,12 @@
 const request = require('request-promise');
 const { WebClient, LogLevel } = require("@slack/web-api");
 
-const client = new WebClient(oAuthBotToken, {
+
+require('dotenv').config()
+console.log(process.env) // remove this after you've confirmed it working
+
+
+const client = new WebClient(process.env.OAUTH_BOT_TOKEN, {
     //LogLevel can make debugging simpler
     logLevel: LogLevel.DEBUG
 });
@@ -9,8 +14,8 @@ const client = new WebClient(oAuthBotToken, {
 const { App } = require('@slack/bolt');
 
 const app = new App({
-  token: oAuthBotToken,
-  appToken: socketToken,
+  token: process.env.OAUTH_BOT_TOKEN,
+  appToken: process.env.SOCKET_TOKEN,
   socketMode: true,
 });
 
@@ -52,10 +57,12 @@ app.event('reaction_added', async ({ event, client, logger }) => {
 
     if(event.reaction === 'robert-point'){
         try {
+            var insultHandler = new Insult(event.user);
+            var insult = insultHandler.GetInsult();
             // Call chat.postMessage with the built-in client
             const result = await client.chat.postMessage({
               channel: event.item.channel,
-              text: `Robert Reaction`
+              text: insult
             });
       
             logger.info(result);
@@ -67,7 +74,7 @@ app.event('reaction_added', async ({ event, client, logger }) => {
     
 });
 
-
+/*
 (async function () {
     try {
         const slackBody = {
@@ -76,7 +83,7 @@ app.event('reaction_added', async ({ event, client, logger }) => {
         };
         
         const res = await request({
-            url: testChannelWebhook,
+            url: process.env.WEBHOOK_TEST_CHANNEL,
             method: 'POST',
             body: slackBody,
             json: true
@@ -87,4 +94,4 @@ app.event('reaction_added', async ({ event, client, logger }) => {
     } catch (e) {
         console.log('our error', e)
     }
-})();
+})();*/
